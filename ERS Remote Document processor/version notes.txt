@@ -1,0 +1,10 @@
+﻿Version		Notes
+-------		------
+0.6			- filepath settings are tested versus default file locations on initial startup to ease installation
+			- duplicates in archive are now sequenced rather than alerting the user
+			- duplicates are archived in the archive/folder of origin/
+0.7			- integration with Albert's code
+0.701		- fix the overflow bug when there are more than 100 files in a folder
+0.7.2		- when a duplicate document is found, offer the option to combine it with the original in addition to swap/discard.  This supports tickets that have been cut before scanning
+0.7.3		 -got the pdf combine working
+0.7.4		- added file logging.  Anytime a file is moved (or re-moved) into the repository it is logged

@@ -1,0 +1,31 @@
+﻿Sub movetoduplicates()
+        'this routine moves selectedfile to the duplicates folder
+        Dim storefilename As String
+        Dim storefilepath As String
+
+        'Next do the file name and path 
+        storefilename = Mid(selectedfile, InStrRev(selectedfile, "\"))  'get the filename
+        If Not currentfilewasprocessed Then
+            storefilepath = DuplicateDirectory & InputMeta(foldernumber).Foldername & "\" 'generate a file directory path corresponding to the incoming path
+        Else
+            storefilepath = DuplicateDirectory & "previously processed\" 'generate the previously processed file directory path
+        End If
+        Try
+            'now move the file into the duplicate folder, checking that the directory exists and whether the file itself exists
+            If Not My.Computer.FileSystem.DirectoryExists(storefilepath) Then My.Computer.FileSystem.CreateDirectory(storefilepath)
+
+            If Not My.Computer.FileSystem.FileExists(storefilepath & storefilename) Then
+                ' if this was a processed file, the move automatically erases the old one
+                My.Computer.FileSystem.MoveFile(selectedfile, storefilepath & storefilename)
+            Else
+                My.Computer.FileSystem.MoveFile(selectedfile, storefilepath & resequence(storefilename), True)
+
+            End If
+
+            'MsgBox("Processing complete.  Original file saved as " & tempfilename)
+        Catch ex As Exception
+            MsgBox("Error occurred while saving files.  Message: " & vbCrLf & ex.Message)
+        End Try
+
+
+    End Sub

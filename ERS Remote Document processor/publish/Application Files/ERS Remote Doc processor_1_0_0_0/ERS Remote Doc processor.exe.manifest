@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1">
+  <asmv1:assemblyIdentity name="ERS Remote Doc processor.exe" version="1.0.0.0" publicKeyToken="69a77ea3d0e5a5ac" language="neutral" processorArchitecture="x86" type="win32" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="ERS Remote Doc processor" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
+    <commandLine file="ERS Remote Doc processor.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!--
+          UAC Manifest Options
+          If you want to change the Windows User Account Control level replace the 
+          requestedExecutionLevel node with one of the following.
+
+        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+         If you want to utilize File and Registry Virtualization for backward 
+         compatibility then delete the requestedExecutionLevel node.
+    -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="AxInterop.AcroPDFLib.dll" size="9216">
+      <assemblyIdentity name="AxInterop.AcroPDFLib" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+        <dsig:DigestValue>KS1Xo82/yCIT2nnHkEWQGcF19Rw=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ERS Remote Doc processor.exe" size="106496">
+      <assemblyIdentity name="ERS Remote Doc processor" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+        <dsig:DigestValue>VeezYA1TXh3/0iVQ9MOg3a+Tlqk=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Interop.AcroPDFLib.dll" size="10240">
+      <assemblyIdentity name="Interop.AcroPDFLib" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+        <dsig:DigestValue>jHXU77gtNKIb8I7rU9gbycJoEHY=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="TextFile1.txt" size="2118">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>Tm8XcItuSRpFMWD67eCGi4ghl0c=</dsig:DigestValue>
+    </hash>
+  </file>
+<publisherIdentity name="CN=Richard-PC\Richard" issuerKeyHash="cbde274d8f340f640c20438f4a2cd24692d4160f" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue>YRgYIfJ3xKRHC7+uARphXviRo7I=</DigestValue></Reference></SignedInfo><SignatureValue>TM8fbB194mzNsZ7ir7qRqM4rkc0Xu1/Bv0JWMUX5/nx+kud0y25CqId4IW75dySmrLHhEunw0zAbw2ET7yiWzOqHPWVA9SoNUQUnRH02Q5W/XwrdEko2s/o4vYSlIfxC5FvfF5a0X4frUKhCtwU3cJJ4g59ofIpuykIQbe8YRSs=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>v0Y2vlfSoamJW5N0foZ/mk2gKZC3mC/4zddt4fNMsAyyYZzYaGcRyzu4UrXXeM1rXa08dE/zM9sDOTcbBgABbR/PA6w1C/3imbQLH4ePrg2eVLCRpLJqxRshDlosHmMBYplKQ3v761X9wSjj27vPtT5186BpVNh0cdItTtfJ7Oc=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="b2a391f85e611a01aebf0b47a4c477f221181861" Description="" Url=""><as:assemblyIdentity name="ERS Remote Doc processor.exe" version="1.0.0.0" publicKeyToken="69a77ea3d0e5a5ac" language="neutral" processorArchitecture="x86" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=Richard-PC\Richard</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue>lfxOObCSNfUIyZchsDIkuP/LY5s=</DigestValue></Reference></SignedInfo><SignatureValue>na86lXP5G27t5OwSOYm8DaMmXj57TGlgznzbDT0bwOzaiWAHc3aP9BgPh59ltC/H+ac1SWIljkcfBXYOHpQXE8li80wp+YbNko87ojaUiw0yKTjA+TtZxTY4tWvBDemkWCioh/s35h3M1s8PuspZW48odUMxLeoqTrIIoLQmbP0=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>v0Y2vlfSoamJW5N0foZ/mk2gKZC3mC/4zddt4fNMsAyyYZzYaGcRyzu4UrXXeM1rXa08dE/zM9sDOTcbBgABbR/PA6w1C/3imbQLH4ePrg2eVLCRpLJqxRshDlosHmMBYplKQ3v761X9wSjj27vPtT5186BpVNh0cdItTtfJ7Oc=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIB4TCCAUqgAwIBAgIQbdVE5cZpZY9EX3rJqPAISzANBgkqhkiG9w0BAQUFADAvMS0wKwYDVQQDHiQAUgBpAGMAaABhAHIAZAAtAFAAQwBcAFIAaQBjAGgAYQByAGQwHhcNMTMwNTI4MTUyNTAwWhcNMTQwNTI4MjEyNTAwWjAvMS0wKwYDVQQDHiQAUgBpAGMAaABhAHIAZAAtAFAAQwBcAFIAaQBjAGgAYQByAGQwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAL9GNr5X0qGpiVuTdH6Gf5pNoCmQt5gv+M3XbeHzTLAMsmGc2GhnEcs7uFK113jNa12tPHRP8zPbAzk3GwYAAW0fzwOsNQv94pm0Cx+Hj64NnlSwkaSyasUbIQ5aLB5jAWKZSkN7++tV/cEo49u7z7U+dfOgaVTYdHHSLU7XyeznAgMBAAEwDQYJKoZIhvcNAQEFBQADgYEAkZ6t00+nrGw9/Ka7KBQhkvghsDHD1vYhl5sk7G96IF9iURyS5IxxMqAiKnJpZMe2ni6pQ5tq7LX+awpp+cQk17c40kRgIJ37oUGcMzn0HqXGBG+grpwR61bqqPWwP3hUEfbPZ9F5v+pr0CSwrLVnmlsqNri6KTzhwKnQkkXQFDk=</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>

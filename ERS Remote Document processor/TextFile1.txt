@@ -1,0 +1,5 @@
+﻿    Dim FilePrefix() As String = New String() {"SO", "BOL", "CDS", "DSD", "FLHA", " Fuel", "M", "Log", "Time", "Drop", "TC", "TS", "VehInsp", "WO", "Oth"}
+    Dim Metatagstring() As String = New String() {"d=", "t=", "dr=", "", "c=", "so=", "de=", "sh="}
+    Dim Metacontent(,) As Boolean = New Boolean(,) {{False, True, True, True, True, True, True, True, True, True, True, False, True, True, True}, {False, True, False, True, False, True, True, True, True, False, True, False, True, False, True}, {False, False, False, False, False, True, True, True, True, True, False, False, True, False, True}, {True, True, True, False, False, False, False, False, False, False, False, True, False, False, True}, {False, False, False, True, False, False, False, False, False, False, False, False, False, True, True}, {False, False, False, True, False, False, False, False, False, False, False, False, False, True, True}, {False, False, False, False, True, False, False, False, False, False, False, False, False, False, True}, {False, False, True, False, False, False, False, False, False, False, False, False, False, False, False}}
+
+    

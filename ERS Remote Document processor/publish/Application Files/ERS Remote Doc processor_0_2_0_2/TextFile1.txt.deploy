@@ -1,0 +1,38 @@
+﻿        Dim MousePositionInClientCoords As Point = New Point(Cursor.Position.X, Cursor.Position.Y)
+        Dim indexUnderTheMouse As Integer = lbxOutputFiles.IndexFromPoint(MousePositionInClientCoords)
+        If indexUnderTheMouse > -1 Then
+            Dim s As String = lbxOutputFiles.Items(indexUnderTheMouse).ToString
+            Dim g As Graphics = lbxOutputFiles.CreateGraphics
+            If g.MeasureString(s, lbxOutputFiles.Font).Width > lbxOutputFiles.ClientRectangle.Width Then
+                Me.ToolTip1.SetToolTip(Me.lbxOutputFiles, s)
+            Else
+                Me.ToolTip1.SetToolTip(Me.lbxOutputFiles, "")
+            End If
+            g.Dispose()
+        End If
+
+
+
+		    Private Sub ListBox1_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles ListBox1.MouseMove
+        Dim MousePositionInClientCoords As Point = New Point(e.X, e.Y)
+        Dim indexUnderTheMouse As Integer = Me.ListBox1.IndexFromPoint(MousePositionInClientCoords)
+        If indexUnderTheMouse > -1 Then
+            Dim s As String = Me.ListBox1.Items(indexUnderTheMouse).ToString
+            Dim g As Graphics = Me.ListBox1.CreateGraphics
+            If g.MeasureString(s, Me.ListBox1.Font).Width > Me.ListBox1.ClientRectangle.Width Then
+                Me.ToolTip1.SetToolTip(Me.ListBox1, s)
+            Else
+                Me.ToolTip1.SetToolTip(Me.ListBox1, "")
+            End If
+            g.Dispose()
+        End If
+    End Sub
+
+	    Private Sub lbxOutputFiles_MouseHover(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lbxOutputFiles.MouseHover
+        'the mouse is over the output file window. Display the filename as a pop up, if it's available
+        Dim itempoint As Point = New Point(MousePosition.X, MousePosition.Y)
+        Dim itemIndex As Integer = MousePosition.Y / Me.lbxOutputFiles.ItemHeight
+        itemIndex += Me.lbxOutputFiles.TopIndex
+        'Me.ToolTip1.SetToolTip(Me.lbxOutputFiles, Me.lbxOutputFiles.Items(Me.lbxOutputFiles.SelectedIndex))
+        Debug.Print("{0: ",itempoint)")
+    End Sub
