@@ -511,7 +511,7 @@ Public Class Form1
         Dim Tbox As TextBox
         Dim i As Integer
         Dim result As DialogResult
-        Stop
+        ' Stop TODO why is this here?
         Dim ofi As FileInfo 'store file information for logging
         Dim pfi As FileInfo
 
