@@ -1031,6 +1031,9 @@ Public Class Form1
         'save index 
         Dim index As Int16 = lbxInputFiles.SelectedIndex
         Dim originFile As String = lbxInputFiles.SelectedItem
+        Dim originFileForArchive As String = originFile.Insert(originFile.LastIndexOf("."), "pagecut_" & Date.Now.Year & Date.Now.Month & Date.Now.Day & Date.Now.Hour & Date.Now.Minute & Date.Now.Second)
+        Dim tempfolderdirectory As String = ArchiveDirectory & InputMeta(foldernumber).Foldername 'the archive folder ties back to the incoming folder
+
         currentfilelist = PopulateFileList(InputMeta(foldernumber).DirectoryName, Me.lbxInputFiles)
 
 
@@ -1079,16 +1082,15 @@ Public Class Form1
             End Using
         End Using
 
-        '  Dim result As Integer = MessageBox.Show("Delete the original file ? ", "Delete Original? ", MessageBoxButtons.YesNoCancel)
-        '  If result = DialogResult.Yes Then
-
-        '        My.Computer.FileSystem.DeleteFile(path)
-        '       Else
-        '      lbxInputFiles.SelectedIndex = index
-        '     End If
 
 
         'reset folders
+
+        '  Dim tempfolderdirectory As String = ArchiveDirectory & InputMeta(foldernumber).Foldername 'the archive folder ties back to the incoming folder
+
+        My.Computer.FileSystem.CopyFile(selectedfile, tempfolderdirectory & "\" & originFileForArchive, True)
+
+
         My.Computer.FileSystem.DeleteFile(path)
         My.Computer.FileSystem.RenameFile(destinationFile, originFile)
         SetupFolders()
@@ -1103,7 +1105,7 @@ Public Class Form1
         Dim index As Int16 = lbxInputFiles.SelectedIndex
         Dim ArchiveDirectory As String = My.Settings.archivepath
         'use below to test . delete before moving to prod:
-        ArchiveDirectory = "\\ers-server04\users$\dmedele\Desktop\remote doc test  folder\Archive folder\"
+        'ArchiveDirectory = "\\ers-server04\users$\dmedele\Desktop\remote doc test  folder\Archive folder\"
         Dim path As String = selectedfile   'record the file position
         Dim ArchiveFilePath = ArchiveDirectory & lbxInputFiles.SelectedItem
         Dim ArchiveFileName = lbxInputFiles.SelectedItem
