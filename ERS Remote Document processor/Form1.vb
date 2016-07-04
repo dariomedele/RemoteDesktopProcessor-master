@@ -19,6 +19,7 @@ Imports System.Environment
 
 Public Class Form1
     'Version and application title
+    Dim tempFolder As String = "C:\ERStemp\"
     Dim Apptitle As String = "ERS Remote Document Processor"
     Dim Version As Integer = 0
     Dim SubVersion As Integer = 7
@@ -164,7 +165,8 @@ Public Class Form1
         If Lbox.Items.Count > 0 Then
             Lbox.SelectedIndex = 0
             selectedfile = currentfilelist(nametype.full, 0)
-            PDFViewWindow.src = selectedfile
+            Dim tempFile As String = GetTempFileLocation(selectedfile)
+            PDFViewWindow.src = tempFile
         End If
 
         'populate the document combobox
@@ -251,7 +253,8 @@ Public Class Form1
         If Lbox.Items.Count > 0 Then
             Lbox.SelectedIndex = 0
             selectedfile = currentfilelist(nametype.full, 0)
-            PDFViewWindow.src = selectedfile
+
+            PDFViewWindow.src = GetTempFileLocation(selectedfile)
         Else
             With PDFViewWindow
                 .src = ""
@@ -287,7 +290,10 @@ Public Class Form1
         Me.LblFileName.Text = currentfilelist(nametype.display, index)
 #End If
         selectedfile = currentfilelist(nametype.full, index)
-        PDFViewWindow.src = selectedfile
+
+        Dim tempFile As String = GetTempFileLocation(selectedfile)
+
+        PDFViewWindow.src = tempFile '  selectedfile
         'todo view properties
 
         PDFViewWindow.setPageMode("none")
@@ -295,7 +301,25 @@ Public Class Form1
         ReturnFocus()
 
     End Sub
+    Private Function GetTempFileLocation(ByVal fileName As String) As String
 
+        Dim tempFile = tempFolder & Path.GetFileName(fileName)
+        If Path.GetDirectoryName(fileName) <> "" Then
+            For Each foundFile As String In My.Computer.FileSystem.GetFiles(tempFolder)
+                If Path.GetFileName(foundFile) <> Path.GetFileName(fileName) Then
+                    My.Computer.FileSystem.DeleteFile(foundFile)
+                End If
+            Next
+
+            If Not File.Exists(tempFile) Then
+                My.Computer.FileSystem.CopyFile(fileName, tempFile, True)
+            End If
+        End If
+
+        Return tempFile
+
+
+    End Function
     Private Sub BtnPrint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnPrint.Click
         'come here if print button clicked
         If neverprinted Then
@@ -516,6 +540,8 @@ Public Class Form1
         Dim pfi As FileInfo
 
         'grab the original file information for logging
+        selectedfile = GetTempFileLocation(selectedfile)
+
         ofi = My.Computer.FileSystem.GetFileInfo(selectedfile)
 
         Dim MyDocIndex As New DocIndexer.MyIndex(Metatagstring, metalabels, FilePrefix, My.Settings.ERSCon)
@@ -551,37 +577,44 @@ Public Class Form1
                 My.Computer.FileSystem.CopyFile(selectedfile, tempfolderdirectory & shortfilename, True)
                 'now log the move
                 pfi = My.Computer.FileSystem.GetFileInfo(tempfolderdirectory & shortfilename)
-                LogFileProcessed(ofi, pfi)
+                If (System.Deployment.Application.ApplicationDeployment.IsNetworkDeployed) Then 'only log when deployed
+                    LogFileProcessed(ofi, pfi)
+                End If
                 ' index this file
                 MyDocIndex.IndexDoc(My.User.Name, pfi.FullName, True)
 
-            End If
+                End If
 
-            'now move the file into the processed folder, checking that the directory exists and whether the file itself exists
+                'now move the file into the processed folder, checking that the directory exists and whether the file itself exists
 
-            If Not My.Computer.FileSystem.DirectoryExists(storefilepath) Then My.Computer.FileSystem.CreateDirectory(storefilepath)
+                If Not My.Computer.FileSystem.DirectoryExists(storefilepath) Then My.Computer.FileSystem.CreateDirectory(storefilepath)
 
             destinationfile = storefilepath & tempfilename
             If Not My.Computer.FileSystem.FileExists(destinationfile) Or currentfilewasprocessed Then
                 ' if this was a processed file, the move automatically erases the old one
                 My.Computer.FileSystem.MoveFile(selectedfile, destinationfile)
                 'now log the move
+
                 pfi = My.Computer.FileSystem.GetFileInfo(destinationfile)
-                LogFileProcessed(ofi, pfi)
+                If (System.Deployment.Application.ApplicationDeployment.IsNetworkDeployed) Then 'only log when deployed
+                    LogFileProcessed(ofi, pfi)
+                End If
                 MyDocIndex.IndexDoc(My.User.Name, pfi.FullName, True)
-            Else
-                'we have a duplicate.  put up a dialog box so the user can choose what to do.  Result is the answer to the question: overwrite the existing file?  If no, then move to duplicates
-                result = Dialog2.ShowDialog()
+                Else
+                    'we have a duplicate.  put up a dialog box so the user can choose what to do.  Result is the answer to the question: overwrite the existing file?  If no, then move to duplicates
+                    result = Dialog2.ShowDialog()
 
                 If result = System.Windows.Forms.DialogResult.Cancel Then Return
                 If result = System.Windows.Forms.DialogResult.Yes Then
                     My.Computer.FileSystem.MoveFile(selectedfile, destinationfile, True)
                     'now log the move
                     pfi = My.Computer.FileSystem.GetFileInfo(destinationfile)
-                    LogFileProcessed(ofi, pfi)
+                    If (System.Deployment.Application.ApplicationDeployment.IsNetworkDeployed) Then 'only log when deployed
+                        LogFileProcessed(ofi, pfi)
+                    End If
                 End If
 
-                If result = System.Windows.Forms.DialogResult.No Then movetoduplicates()
+                    If result = System.Windows.Forms.DialogResult.No Then movetoduplicates()
             End If
 
             'MsgBox("Processing complete.  Original file saved as " & tempfilename)
@@ -628,10 +661,12 @@ Public Class Form1
 #End If
         'put the file in the viewer window
         selectedfile = currentfilelist(nametype.full, filenumber)
-        PDFViewWindow.src = selectedfile
+        PDFViewWindow.src = GetTempFileLocation(selectedfile) ' selectedfile
 
         'TODO: next:I dont' know
 
+        'move the filenames into a single dimensional array to put back into LbxOutput
+        Me.lbxOutputFiles.Items.Clear()
     End Sub
     Private Sub updatefilelists(ByVal storefilepath As String, ByVal tempfilename As String)
         'after processing or adding files, update the relevant filelist
@@ -644,8 +679,6 @@ Public Class Form1
             processedfilelist(nametype.display, filenumber) = tempfilename
             currentfilelist = processedfilelist
 
-            'move the filenames into a single dimensional array to put back into LbxOutput
-            Me.lbxOutputFiles.Items.Clear()
             For i = 0 To processedfilelistlast
                 Me.lbxOutputFiles.Items.Add(processedfilelist(nametype.display, i))
                 Debug.Print(processedfilelist(nametype.display, i))
@@ -862,7 +895,7 @@ Public Class Form1
             End If
 
             selectedfile = currentfilelist(nametype.full, Me.lbxInputFiles.SelectedIndex)
-            PDFViewWindow.src = selectedfile
+            PDFViewWindow.src = GetTempFileLocation(selectedfile) ' selectedfile
         End If
     End Sub
 
@@ -874,6 +907,7 @@ Public Class Form1
         Dim pfi As FileInfo
 
         'Next do the file name and path 
+
         storefilename = Mid(selectedfile, InStrRev(selectedfile, "\"))  'get the filename
         If Not currentfilewasprocessed Then
             storefilepath = DuplicateDirectory & InputMeta(foldernumber).Foldername & "\" 'generate a file directory path corresponding to the incoming path
@@ -896,8 +930,9 @@ Public Class Form1
 
             'record the process
             pfi = My.Computer.FileSystem.GetFileInfo(storefilepath & storefilename)
-            LogFileProcessed(ofi, pfi)
-
+            If (System.Deployment.Application.ApplicationDeployment.IsNetworkDeployed) Then 'only log when deployed
+                LogFileProcessed(ofi, pfi)
+            End If
             'MsgBox("Processing complete.  Original file saved as " & tempfilename)
         Catch ex As Exception
             MsgBox("Error occurred while saving files.  Message: " & vbCrLf & ex.Message)
@@ -1030,7 +1065,8 @@ Public Class Form1
 
         'save index 
         Dim index As Int16 = lbxInputFiles.SelectedIndex
-        Dim originFile As String = lbxInputFiles.SelectedItem
+        Dim originFile As String = GetTempFileLocation(lbxInputFiles.SelectedItem)
+
         Dim originFileForArchive As String = originFile.Insert(originFile.LastIndexOf("."), "pagecut_" & Date.Now.Year & Date.Now.Month & Date.Now.Day & Date.Now.Hour & Date.Now.Minute & Date.Now.Second)
         Dim tempfolderdirectory As String = ArchiveDirectory & InputMeta(foldernumber).Foldername 'the archive folder ties back to the incoming folder
 
@@ -1045,7 +1081,7 @@ Public Class Form1
         selectedfile = currentfilelist(nametype.full, index)
 
 
-        Dim path As String = selectedfile   'record the file position
+        Dim path As String = GetTempFileLocation(selectedfile)  'record the file position
 
         Dim destinationFile As String = path.Insert(path.LastIndexOf("."), "___")
 
@@ -1088,50 +1124,43 @@ Public Class Form1
 
         '  Dim tempfolderdirectory As String = ArchiveDirectory & InputMeta(foldernumber).Foldername 'the archive folder ties back to the incoming folder
 
-        My.Computer.FileSystem.CopyFile(selectedfile, tempfolderdirectory & "\" & originFileForArchive, True)
+        ' My.Computer.FileSystem.CopyFile(selectedfile, tempfolderdirectory & "\" & originFileForArchive, True)
 
 
         My.Computer.FileSystem.DeleteFile(path)
-        My.Computer.FileSystem.RenameFile(destinationFile, originFile)
-        SetupFolders()
-        restorefolderandnextfile(InputMeta(foldernumber).DirectoryName)
-        lbxInputFiles.SelectedItem = originFile
+        My.Computer.FileSystem.RenameFile(destinationFile, System.IO.Path.GetFileName(selectedfile))
+        '  '  SetupFolders()
+        '    restorefolderandnextfile(InputMeta(foldernumber).DirectoryName)
+        'lbxInputFiles.SelectedItem = onFile
 
-
+        lbxInputFiles.SelectedIndex = index
+        PDFViewWindow.src = path ' selectedfile
 
     End Sub
 
     Private Sub btnRestoreFile_Click(sender As Object, e As EventArgs) Handles btnRestoreFile.Click
         Dim index As Int16 = lbxInputFiles.SelectedIndex
-        Dim ArchiveDirectory As String = My.Settings.archivepath
-        'use below to test . delete before moving to prod:
-        'ArchiveDirectory = "\\ers-server04\users$\dmedele\Desktop\remote doc test  folder\Archive folder\"
-        Dim path As String = selectedfile   'record the file position
-        Dim ArchiveFilePath = ArchiveDirectory & lbxInputFiles.SelectedItem
-        Dim ArchiveFileName = lbxInputFiles.SelectedItem
+
         If (index < 0) Then
             MessageBox.Show("Select file")
             Return
         End If
 
-        If Not (My.Computer.FileSystem.FileExists(ArchiveFilePath)) Then
-            MessageBox.Show("File not found in archive directory")
-        Else
-            Dim result As Integer = MessageBox.Show("Overwrite file using archive copy? ", "Overwrite file? ", MessageBoxButtons.YesNoCancel)
-            If result = DialogResult.Yes Then
 
-                My.Computer.FileSystem.CopyFile(ArchiveFilePath, path, True)
-                'reset folders
-                SetupFolders()
-                restorefolderandnextfile(InputMeta(foldernumber).DirectoryName)
-
-            End If
+        Dim result As Integer = MessageBox.Show("Restore file? ", "Restore file? ", MessageBoxButtons.YesNoCancel)
+        If result = DialogResult.Yes Then
 
 
+            lbxInputFiles.SelectedIndex = 0
+            lbxInputFiles.SelectedIndex = index
+
+            'lbxInputFiles_SelectedIndexChanged(sender, e)
 
 
         End If
-        lbxInputFiles.SelectedItem = ArchiveFileName
+
+
+
 
 
     End Sub
