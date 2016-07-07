@@ -535,9 +535,14 @@ Public Class Form1
         Dim Tbox As TextBox
         Dim i As Integer
         Dim result As DialogResult
-        ' Stop TODO why is this here?
+
         Dim ofi As FileInfo 'store file information for logging
         Dim pfi As FileInfo
+        'GET THE ORIGINAL LOCATION TO DELETE THIS FILE. 
+        Dim index As Integer = lbxInputFiles.SelectedIndex
+        currentfilelist = PopulateFileList(InputMeta(foldernumber).DirectoryName, Me.lbxInputFiles)
+        Dim originalLocation As String = currentfilelist(nametype.full, index)
+
 
         'grab the original file information for logging
         selectedfile = GetTempFileLocation(selectedfile)
@@ -593,6 +598,11 @@ Public Class Form1
             If Not My.Computer.FileSystem.FileExists(destinationfile) Or currentfilewasprocessed Then
                 ' if this was a processed file, the move automatically erases the old one
                 My.Computer.FileSystem.MoveFile(selectedfile, destinationfile)
+
+                'Temp file was moved , now delete original file. 
+                If My.Computer.FileSystem.FileExists(originalLocation) Then
+                    My.Computer.FileSystem.DeleteFile(originalLocation)
+                End If
                 'now log the move
 
                 pfi = My.Computer.FileSystem.GetFileInfo(destinationfile)
