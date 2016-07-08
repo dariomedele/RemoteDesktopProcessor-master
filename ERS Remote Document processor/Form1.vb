@@ -19,7 +19,7 @@ Imports System.Environment
 
 Public Class Form1
     'Version and application title
-    Dim tempFolder As String = "C:\ERStemp\"
+    Dim tempFolder As String = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) & "\ERStemp\"
     Dim Apptitle As String = "ERS Remote Document Processor"
     Dim Version As Integer = 0
     Dim SubVersion As Integer = 7
@@ -303,6 +303,9 @@ Public Class Form1
     End Sub
     Private Function GetTempFileLocation(ByVal fileName As String) As String
 
+        If Not Directory.Exists(tempFolder) Then
+            Directory.CreateDirectory(tempFolder)
+        End If
         Dim tempFile = tempFolder & Path.GetFileName(fileName)
         If Path.GetDirectoryName(fileName) <> "" Then
             For Each foundFile As String In My.Computer.FileSystem.GetFiles(tempFolder)
