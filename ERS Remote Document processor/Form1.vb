@@ -1106,22 +1106,38 @@ Public Class Form1
             lbxInputFiles.SelectedItem = originFile
             Return
         End If
+
         Using fs As New FileStream(destinationFile, FileMode.Create, FileAccess.Write, FileShare.None)
             Using doc As New iTextSharp.text.Document()
                 Using w As iTextSharp.text.pdf.PdfWriter = iTextSharp.text.pdf.PdfWriter.GetInstance(doc, fs)
                     'Open the desitination for writing
                     doc.Open()
                     Dim totalPages As Integer = r.NumberOfPages
+                    Dim page As iTextSharp.text.pdf.PdfImportedPage
+
 
                     'Loop through each page that we want to keep
-                    For page As Integer = 1 To totalPages
-                        If page = removePageNumber Then
+                    For pageNumber As Integer = 1 To totalPages
+                        page = w.GetImportedPage(r, pageNumber)
+
+                        If pageNumber = removePageNumber Then
                             'ignore page 
                         Else
                             'Add a new blank page to destination document
                             doc.NewPage()
+
+
+
+
+
+                            'r.GetPageSize()
+                            '  If (page.Width <= page.Height) Then
+                            doc.SetPageSize(r.GetPageSize(pageNumber))
+                            'doc.SetPageSize(rect)
+
                             'Extract the given page from our reader and add it directly to the destination PDF
-                            w.DirectContent.AddTemplate(w.GetImportedPage(r, page), 0, 0)
+                            w.DirectContent.AddTemplate(w.GetImportedPage(r, pageNumber), 0, 0)
+
                         End If
                     Next
                     'Close our document
