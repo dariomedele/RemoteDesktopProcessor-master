@@ -1124,18 +1124,9 @@ Public Class Form1
                             'ignore page 
                         Else
                             'Add a new blank page to destination document
+                            doc.SetPageSize(r.GetPageSize(pageNumber))
                             doc.NewPage()
 
-
-
-
-
-                            'r.GetPageSize()
-                            '  If (page.Width <= page.Height) Then
-                            doc.SetPageSize(r.GetPageSize(pageNumber))
-                            'doc.SetPageSize(rect)
-
-                            'Extract the given page from our reader and add it directly to the destination PDF
                             w.DirectContent.AddTemplate(w.GetImportedPage(r, pageNumber), 0, 0)
 
                         End If
