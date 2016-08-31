@@ -1106,38 +1106,46 @@ Public Class Form1
             lbxInputFiles.SelectedItem = originFile
             Return
         End If
+        'try pdfsharp
+        Dim inputDoc As PdfSharp.Pdf.PdfDocument
+        inputDoc = PdfSharp.Pdf.IO.PdfReader.Open(path)
+        inputDoc.Pages.RemoveAt(removePageNumber - 1)
+        inputDoc.Save(destinationFile)
 
-        Using fs As New FileStream(destinationFile, FileMode.Create, FileAccess.Write, FileShare.None)
-            Using doc As New iTextSharp.text.Document()
-                Using w As iTextSharp.text.pdf.PdfWriter = iTextSharp.text.pdf.PdfWriter.GetInstance(doc, fs)
-                    'Open the desitination for writing
-                    doc.Open()
-                    Dim totalPages As Integer = r.NumberOfPages
-                    Dim page As iTextSharp.text.pdf.PdfImportedPage
+        If 1 = 2 Then
 
 
-                    'Loop through each page that we want to keep
-                    For pageNumber As Integer = 1 To totalPages
-                        page = w.GetImportedPage(r, pageNumber)
+            Using fs As New FileStream(destinationFile, FileMode.Create, FileAccess.Write, FileShare.None)
+                Using doc As New iTextSharp.text.Document()
+                    Using w As iTextSharp.text.pdf.PdfWriter = iTextSharp.text.pdf.PdfWriter.GetInstance(doc, fs)
+                        'Open the desitination for writing
+                        doc.Open()
+                        Dim totalPages As Integer = r.NumberOfPages
+                        Dim page As iTextSharp.text.pdf.PdfImportedPage
 
-                        If pageNumber = removePageNumber Then
-                            'ignore page 
-                        Else
-                            'Add a new blank page to destination document
-                            doc.SetPageSize(r.GetPageSize(pageNumber))
-                            doc.NewPage()
 
-                            w.DirectContent.AddTemplate(w.GetImportedPage(r, pageNumber), 0, 0)
+                        'Loop through each page that we want to keep
+                        For pageNumber As Integer = 1 To totalPages
+                            page = w.GetImportedPage(r, pageNumber)
 
-                        End If
-                    Next
-                    'Close our document
+                            If pageNumber = removePageNumber Then
+                                'ignore page 
+                            Else
+                                'Add a new blank page to destination document
+                                doc.SetPageSize(r.GetPageSize(pageNumber))
+                                doc.NewPage()
 
-                    doc.Close()
+                                w.DirectContent.AddTemplate(w.GetImportedPage(r, pageNumber), 0, 0)
+
+                            End If
+                        Next
+                        'Close our document
+
+                        doc.Close()
+                    End Using
                 End Using
             End Using
-        End Using
-
+        End If
 
 
         'reset folders
